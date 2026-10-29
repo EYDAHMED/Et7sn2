@@ -7,7 +7,6 @@ on:
 
 jobs:
   build:
-  
     runs-on: ubuntu-latest
 
     steps:
@@ -27,13 +26,17 @@ jobs:
         cache: true
 
     - name: Install dependencies
-      run: flutter pub get
+      run: |
+        cd et7sn_complete_with_icon
+        flutter pub get
 
     - name: Build APK
-      run: flutter build apk --release
+      run: |
+        cd et7sn_complete_with_icon
+        flutter build apk --release
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: app-release
-        path: build/app/outputs/flutter-apk/app-release.apk
+        path: et7sn_complete_with_icon/build/app/outputs/flutter-apk/app-release.apk
