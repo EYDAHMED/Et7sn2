@@ -29,8 +29,17 @@ jobs:
       run: |
         cd et7sn_complete_with_icon
         flutter create --platforms=android .
-        # نعدل pubspec.yaml مؤقتاً لتعطيل إعدادات iOS عشان ميكش دروب
         sed -i 's/ios: true/ios: false/g' pubspec.yaml
+        
+        # ضبط إعدادات الـ Android لتتوافق مع الحزم الحديثة وتجنب أخطاء البناء
+        echo "android.minSdkVersion = 21" >> android/local.properties
+        echo "flutter.minSdkVersion = 21" >> android/local.properties
+        
+        # تحديث ملف build.gradle الخاص بالتطبيق لضمان توافق الإصدارات
+        if [ -f "android/app/build.gradle" ]; then
+          sed -i 's/minSdkVersion flutter.minSdkVersion/minSdkVersion 21/g' android/app/build.gradle
+        fi
+        
         flutter pub run flutter_launcher_icons
         flutter pub get
 
