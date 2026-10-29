@@ -29,6 +29,8 @@ jobs:
       run: |
         cd et7sn_complete_with_icon
         flutter create --platforms=android .
+        # نعدل pubspec.yaml مؤقتاً لتعطيل إعدادات iOS عشان ميكش دروب
+        sed -i 's/ios: true/ios: false/g' pubspec.yaml
         flutter pub run flutter_launcher_icons
         flutter pub get
 
