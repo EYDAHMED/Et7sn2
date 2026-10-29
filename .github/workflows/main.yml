@@ -28,18 +28,20 @@ jobs:
     - name: Initialize Android & Dependencies
       run: |
         cd et7sn_complete_with_icon
-        flutter create --platforms=android .
+        
+        # إنشاء مشروع أندرويد متوافق وسليم
+        flutter create --platforms=android --org com.et7sn.app .
+        
+        # تعطيل أيقونات الآيفون لمنع الأخطاء
         sed -i 's/ios: true/ios: false/g' pubspec.yaml
-        
-        # ضبط إعدادات الـ Android لتتوافق مع الحزم الحديثة وتجنب أخطاء البناء
-        echo "android.minSdkVersion = 21" >> android/local.properties
-        echo "flutter.minSdkVersion = 21" >> android/local.properties
-        
-        # تحديث ملف build.gradle الخاص بالتطبيق لضمان توافق الإصدارات
-        if [ -f "android/app/build.gradle" ]; then
-          sed -i 's/minSdkVersion flutter.minSdkVersion/minSdkVersion 21/g' android/app/build.gradle
+
+        # إصلاح إعدادات الـ build.gradle لتجنب مشاكل compileSdkVersion و flutter extension
+        BUILD_GRADLE="android/app/build.gradle"
+        if [ -f "$BUILD_GRADLE" ]; then
+          # التأكد من وجود إعدادات الأندرويد السليمة
+          echo "android { compileSdkVersion 34 }" >> $BUILD_GRADLE
         fi
-        
+
         flutter pub run flutter_launcher_icons
         flutter pub get
 
