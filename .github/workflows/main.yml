@@ -21,32 +21,17 @@ jobs:
     - name: Set up Flutter
       uses: subosito/flutter-action@v2
       with:
-        flutter-version: '3.24.0'
-        channel: 'stable'
+        channel: 'stable'      # latest stable, no pinned old version
         cache: true
 
     - name: Initialize Android & Dependencies
       run: |
         cd et7sn_complete_with_icon
-        
-        # إنشاء مشروع أندرويد
+
         flutter create --platforms=android --org com.et7sn.app .
-        
-        # تعطيل أيقونات الآيفون لتفادي الأخطاء
-        sed -i 's/ios: true/ios: false/g' pubspec.yaml
 
-        # حل نهائي لمشكلة compileSdkVersion والـ flutter extension لمكتبة geolocator
-        APP_GRADLE="android/app/build.gradle"
-        if [ -f "$APP_GRADLE" ]; then
-          # إضافة إعدادات الـ android و compileSdkVersion بشكل صريح يمنع الخطأ تماماً
-          echo "android { compileSdkVersion 34 }" >> $APP_GRADLE
-        fi
-
-        # إضافة ملف local.properties لتعريف مسار فلاتر وحل مشاكل الـ gradle
-        echo "flutter.sdk=$FLUTTER_ROOT" > android/local.properties
-
-        flutter pub run flutter_launcher_icons
         flutter pub get
+        dart run flutter_launcher_icons
 
     - name: Build APK
       run: |
