@@ -25,9 +25,11 @@ jobs:
         channel: 'stable'
         cache: true
 
-    - name: Install dependencies
+    - name: Initialize Android & Dependencies
       run: |
         cd et7sn_complete_with_icon
+        flutter create --platforms=android .
+        flutter pub run flutter_launcher_icons
         flutter pub get
 
     - name: Build APK
