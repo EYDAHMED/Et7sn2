@@ -29,17 +29,16 @@ jobs:
       run: |
         cd et7sn_complete_with_icon
         
-        # إنشاء مشروع أندرويد متوافق وسليم
+        # إنشاء مشروع أندرويد نظيف
         flutter create --platforms=android --org com.et7sn.app .
         
-        # تعطيل أيقونات الآيفون لمنع الأخطاء
+        # تعطيل أيقونات الآيفون لتفادي الأخطاء
         sed -i 's/ios: true/ios: false/g' pubspec.yaml
 
-        # إصلاح إعدادات الـ build.gradle لتجنب مشاكل compileSdkVersion و flutter extension
-        BUILD_GRADLE="android/app/build.gradle"
-        if [ -f "$BUILD_GRADLE" ]; then
-          # التأكد من وجود إعدادات الأندرويد السليمة
-          echo "android { compileSdkVersion 34 }" >> $BUILD_GRADLE
+        # حل مشكلة تتبع الـ geolocator وإضافات الـ flutter في الـ build.gradle الرئيسي
+        BUILD_FILE="android/build.gradle"
+        if [ -f "$BUILD_FILE" ]; then
+          echo "allprojects { repositories { google(); mavenCentral() } }" >> $BUILD_FILE
         fi
 
         flutter pub run flutter_launcher_icons
